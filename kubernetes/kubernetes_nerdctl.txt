@@ -1,0 +1,38 @@
+KUBERNETES NERDCTL, 202405
+
+
+
+-- install
+wget -c "https://github.com/containerd/nerdctl/releases/download/v1.7.0/nerdctl-1.7.0-linux-amd64.tar.gz" -O nerdctl-1.7.0-linux-amd64.tar.gz
+wget -c "http://199.115.230.237:12345/kubernetes/nerdctl-1.7.0-linux-amd64.tar.gz" -O nerdctl-1.7.0-linux-amd64.tar.gz
+
+tar tvf nerdctl-1.7.0-linux-amd64.tar.gz
+mkdir -p nerdctl-1.7.0-linux-amd64
+tar xzvf nerdctl-1.7.0-linux-amd64.tar.gz -C nerdctl-1.7.0-linux-amd64
+
+chown -R root:root nerdctl-1.7.0-linux-amd64
+
+chmod +x nerdctl-1.7.0-linux-amd64/nerdctl
+
+cp -a nerdctl-1.7.0-linux-amd64/nerdctl /usr/local/bin/
+
+
+
+-- status
+nerdctl namespace ls
+
+nerdctl ps
+nerdctl images
+
+nerdctl -n k8s.io ps
+nerdctl -n k8s.io images
+
+
+
+-- uninstall
+rm -f /usr/local/bin/nerdctl
+rm -rf /var/lib/nerdctl
+rm -f /etc/cni/net.d/nerdctl-bridge.conflist
+
+ifconfig nerdctl0 down
+ip link delete nerdctl0

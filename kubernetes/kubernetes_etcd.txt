@@ -1,0 +1,15 @@
+KUBERNETES ETCD, 202405
+
+wget -c "https://github.com/etcd-io/etcd/releases/download/v3.4.30/etcd-v3.4.30-linux-amd64.tar.gz" -O etcd-v3.4.30-linux-amd64.tar.gz
+wget -c "http://199.115.230.237:12345/kubernetes/etcd-v3.4.30-linux-amd64.tar.gz" -O etcd-v3.4.30-linux-amd64.tar.gz
+
+tar tzf etcd-v3.4.30-linux-amd64.tar.gz
+tar xzvf etcd-v3.4.30-linux-amd64.tar.gz
+
+chown -R root:root etcd-v3.4.30-linux-amd64
+
+chmod +x etcd-v3.4.30-linux-amd64/etcd
+chmod +x etcd-v3.4.30-linux-amd64/etcdctl
+
+cp -a etcd-v3.4.30-linux-amd64/etcd    /usr/local/bin/
+cp -a etcd-v3.4.30-linux-amd64/etcdctl /usr/local/bin/

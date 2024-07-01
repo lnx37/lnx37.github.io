@@ -1,0 +1,39 @@
+KUBERNETES ISTIO, 202403
+
+wget -c "https://github.com/istio/istio/releases/download/1.21.0/istio-1.21.0-linux-amd64.tar.gz" -O istio-1.21.0-linux-amd64.tar.gz
+wget -c "http://199.115.230.237:12345/kubernetes/istio-1.21.0-linux-amd64.tar.gz" -O istio-1.21.0-linux-amd64.tar.gz
+
+tar tvf istio-1.21.0-linux-amd64.tar.gz
+tar xzvf istio-1.21.0-linux-amd64.tar.gz
+
+cd istio-1.21.0
+
+cp -a bin/istioctl /usr/local/bin/
+
+istioctl install --set profile=demo -y
+istioctl uninstall -y --purge
+
+kubectl get namespace --show-labels
+kubectl label namespace default istio-injection=enabled
+
+istioctl analyze
+
+kubectl get crds
+kubectl get pod -n istio-system
+kubectl get svc -n istio-system
+
+cp -ar samples/addons samples/addons_bk_raw
+diff -u -r samples/addons_bk_raw samples/addons
+diff -u -r -q samples/addons_bk_raw samples/addons
+
+sed -i "s|image: docker.io|image: m.daocloud.io/docker.io|g" samples/addons/*.yaml
+sed -i 's|image: "docker.io|image: "m.daocloud.io/docker.io|g' samples/addons/*.yaml
+sed -i 's|image: "ghcr.io|image: "m.daocloud.io/ghcr.io|g' samples/addons/*.yaml
+sed -i 's|image: "quay.io|image: "m.daocloud.io/quay.io|g' samples/addons/*.yaml
+diff -u -r samples/addons_bk_raw samples/addons
+diff -u -r -q samples/addons_bk_raw samples/addons
+
+kubectl apply -f samples/addons
+kubectl delete -f samples/addons
+
+https://istio.io/latest/docs/setup/getting-started/

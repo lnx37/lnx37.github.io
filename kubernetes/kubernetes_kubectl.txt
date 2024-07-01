@@ -1,0 +1,12 @@
+KUBERNETES KUBECTL, 202405
+
+wget -c "https://dl.k8s.io/release/v1.28.2/bin/linux/amd64/kubectl" -O kubectl
+wget -c "http://199.115.230.237:12345/kubernetes/kubernetes_v1.28.2/kubectl" -O kubectl
+
+chown -R root:root kubectl
+
+chmod +x kubectl
+
+cp -a kubectl /usr/local/bin/
+
+kubectl version

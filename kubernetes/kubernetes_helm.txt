@@ -1,0 +1,22 @@
+KUBERNETES HELM, 202405
+
+wget -c "https://get.helm.sh/helm-v3.14.1-linux-amd64.tar.gz" -O helm-v3.14.1-linux-amd64.tar.gz
+wget -c "http://199.115.230.237:12345/kubernetes/helm-v3.14.1-linux-amd64.tar.gz" -O helm-v3.14.1-linux-amd64.tar.gz
+
+tar tvf helm-v3.14.1-linux-amd64.tar.gz
+tar xzvf helm-v3.14.1-linux-amd64.tar.gz
+
+chown -R root:root linux-amd64
+
+chmod +x linux-amd64/helm
+
+cp -a linux-amd64/helm /usr/local/bin/
+
+helm version
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo list
+helm repo update
+
+helm repo list
+helm list

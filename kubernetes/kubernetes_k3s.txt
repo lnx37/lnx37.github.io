@@ -1,0 +1,24 @@
+KUBERNETES K3S, 202405
+
+wget -c "https://github.com/k3s-io/k3s/releases/download/v1.29.4%2Bk3s1/k3s" -O k3s
+wget -c "http://199.115.230.237:12345/kubernetes/k3s_v1.29.4/k3s" -O k3s
+
+chown root:root k3s
+
+chmod +x k3s
+
+cp -a k3s /usr/local/bin/
+
+k3s server
+nohup k3s server &
+
+k3s kubectl get node
+k3s kubectl get pod -A
+
+k3s crictl ps
+k3s crictl images
+
+k3s kubectl create deployment nginx --image=nginx
+k3s kubectl get pod -A
+
+cat /etc/rancher/k3s/k3s.yaml

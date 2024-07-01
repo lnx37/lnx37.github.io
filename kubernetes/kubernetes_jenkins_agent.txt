@@ -1,0 +1,13 @@
+KUBERNETES JENKINS AGENT, 202406
+
+wget -c "https://get.jenkins.io/war-stable/2.452.2/jenkins.war" -O jenkins.war
+
+yum install java-11-openjdk -y
+yum install java-11-openjdk-devel -y
+
+nohup java -jar jenkins.war &
+
+Dashboard -> Manage Jenkins -> Clouds -> Install a plugin -> Kubernetes
+Dashboard -> Manage Jenkins -> Clouds -> New cloud -> Kubernetes URL -> Credentials -> Secret file -> WebSocket -> Test Connection
+Dashboard -> Manage Jenkins -> Clouds -> Pod Templates -> Labels -> Containers -> Docker Image -> jenkins/inbound-agent
+Dashboard -> New Item -> Label Expression

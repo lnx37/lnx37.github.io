@@ -1,0 +1,27 @@
+KUBERNETES DOCKER, 202405
+
+wget -c "https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo" -O /etc/yum.repos.d/docker-ce.repo
+
+yum list docker-ce
+yum list docker-ce --showduplicates
+
+yum install docker-ce-25.0.3 -y
+systemctl restart docker
+systemctl status docker
+
+cat <<EOF >/etc/docker/daemon.json
+{
+  "exec-opts": [
+    "native.cgroupdriver=systemd"
+  ],
+  "registry-mirrors": [
+    "https://docker.m.daocloud.io",
+    "https://cagucih8.mirror.aliyuncs.com/"
+  ],
+  "insecure-registries": [
+    "120.24.173.76"
+  ]
+}
+EOF
+systemctl restart docker
+systemctl status docker

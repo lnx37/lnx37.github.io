@@ -1,0 +1,18 @@
+KUBERNETES MICROSERVICE, 202403
+
+wget "https://github.com/GoogleCloudPlatform/microservices-demo/archive/refs/tags/v0.9.0.tar.gz" -O v0.9.0.tar.gz
+
+tar tvf v0.9.0.tar.gz
+tar xzvf v0.9.0.tar.gz
+
+cd microservices-demo-0.9.0
+cd release
+
+cp -a kubernetes-manifests.yaml kubernetes-manifests.yaml_bk_raw
+diff -u kubernetes-manifests.yaml_bk_raw kubernetes-manifests.yaml
+
+sed -i "s|image: gcr.io|image: gcr.nju.edu.cn|g" kubernetes-manifests.yaml
+diff -u kubernetes-manifests.yaml_bk_raw kubernetes-manifests.yaml
+
+kubectl apply -f kubernetes-manifests.yaml
+kubectl delete -f kubernetes-manifests.yaml

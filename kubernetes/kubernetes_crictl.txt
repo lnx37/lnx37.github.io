@@ -1,0 +1,22 @@
+KUBERNETES CRICTL, 202405
+
+wget -c "https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.28.0/crictl-v1.28.0-linux-amd64.tar.gz" -O crictl-v1.28.0-linux-amd64.tar.gz
+wget -c "http://199.115.230.237:12345/kubernetes/crictl-v1.28.0-linux-amd64.tar.gz" -O crictl-v1.28.0-linux-amd64.tar.gz
+
+tar tvf crictl-v1.28.0-linux-amd64.tar.gz
+mkdir -p crictl
+tar xzvf crictl-v1.28.0-linux-amd64.tar.gz -C crictl
+
+chown -R root:root crictl
+
+chmod +x crictl/crictl
+
+cp -a crictl/crictl /usr/local/bin/
+
+cat /etc/crictl.yaml
+crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock
+crictl config --set image-endpoint=unix:///run/containerd/containerd.sock
+cat /etc/crictl.yaml
+
+crictl ps
+crictl images

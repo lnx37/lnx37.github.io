@@ -1,0 +1,40 @@
+KUBERNETES HARBOR, 202405
+
+wget -c "https://github.com/goharbor/harbor/releases/download/v2.10.2/harbor-offline-installer-v2.10.2.tgz" -O harbor-offline-installer-v2.10.2.tgz
+wget -c "http://199.115.230.237:12345/kubernetes/harbor-offline-installer-v2.10.2.tgz" -O harbor-offline-installer-v2.10.2.tgz
+
+cp -a harbor.yml.tmpl harbor.yml
+diff -u harbor.yml.tmpl harbor.yml
+
+sed -i "s/^hostname: reg.mydomain.com$/hostname: 120.25.235.17/g" harbor.yml
+sed -i "s/^https:$/# https:/g" harbor.yml
+sed -i "s/^  port: 443$/#   port: 443/g" harbor.yml
+sed -i "s|^  certificate: /your/certificate/path$|#   certificate: /your/certificate/path|g" harbor.yml
+sed -i "s|^  private_key: /your/private/key/path$|#   private_key: /your/private/key/path|g" harbor.yml
+diff -u harbor.yml.tmpl harbor.yml
+
+bash install.sh
+
+http://120.25.235.17/
+admin
+Harbor12345
+
+docker images
+docker ps
+
+docker compose ps
+docker compose down
+docker compose down -v
+docker compose up -d
+
+docker login 120.25.235.17 -u admin -p Harbor12345
+
+docker pull nginx:1.26
+docker tag nginx:1.26 120.25.235.17/library/nginx:1.26
+docker push 120.25.235.17/library/nginx:1.26
+docker rmi 120.25.235.17/library/nginx:1.26
+docker pull 120.25.235.17/library/nginx:1.26
+
+---
+
+kubectl create deployment nginx --image=120.25.235.17/library/nginx:1.26

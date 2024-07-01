@@ -1,0 +1,17 @@
+KUBERNETES KUSTOMIZE, 202405
+
+wget "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.1/kustomize_v5.4.1_linux_amd64.tar.gz" -O kustomize_v5.4.1_linux_amd64.tar.gz
+
+tar tvf kustomize_v5.4.1_linux_amd64.tar.gz
+tar xzvf kustomize_v5.4.1_linux_amd64.tar.gz
+
+chown root:root kustomize
+
+chmod +x kustomize
+
+cp -a kustomize /usr/local/bin/
+
+kustomize version
+
+kubectl apply --kustomize ./
+kubectl apply -k ./

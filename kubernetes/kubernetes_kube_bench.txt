@@ -1,0 +1,11 @@
+KUBERNETES KUBE BENCH, 202405
+
+wget "https://raw.githubusercontent.com/aquasecurity/kube-bench/main/job.yaml" -O job.yaml
+
+cp -a job.yaml job.yaml_bk_raw
+
+kubectl apply -f job.yaml
+kubectl delete -f job.yaml
+
+kubectl get pod
+kubectl logs kube-bench-nzvzk

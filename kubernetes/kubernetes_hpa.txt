@@ -1,0 +1,20 @@
+KUBERNETES HPA, 202405
+
+wget "https://k8s.io/examples/application/php-apache.yaml" -O php-apache.yaml
+
+cp -a php-apache.yaml php-apache.yaml_bk_raw
+diff -u php-apache.yaml_bk_raw php-apache.yaml
+
+sed -i "s|image: registry.k8s.io|image: m.daocloud.io/registry.k8s.io|g" php-apache.yaml
+diff -u php-apache.yaml_bk_raw php-apache.yaml
+
+kubectl apply -f php-apache.yaml
+kubectl delete -f php-apache.yaml
+
+kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
+kubectl get hpa
+
+kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache; done"
+kubectl get hpa php-apache --watch
+
+https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/

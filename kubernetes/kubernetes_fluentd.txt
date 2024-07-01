@@ -1,0 +1,29 @@
+KUBERNETES FLUENTD, 202403
+
+wget "https://raw.githubusercontent.com/fluent/fluentd-kubernetes-daemonset/master/fluentd-daemonset-elasticsearch-rbac.yaml" -O fluentd-daemonset-elasticsearch-rbac.yaml
+
+cp -a fluentd-daemonset-elasticsearch-rbac.yaml fluentd-daemonset-elasticsearch-rbac.yaml_bk_raw
+diff -u fluentd-daemonset-elasticsearch-rbac.yaml_bk_raw fluentd-daemonset-elasticsearch-rbac.yaml
+
+fluentd-daemonset-elasticsearch-rbac.yaml
+-----------------------------------------
+        # image: fluent/fluentd-kubernetes-daemonset:v1-debian-elasticsearch
+        image: fluent/fluentd-kubernetes-daemonset:v1.16.2-debian-elasticsearch7-1.1
+...
+            # value: "elasticsearch-logging"
+            value: ""
+...
+          - name: FLUENT_CONTAINER_TAIL_EXCLUDE_PATH
+            value: /var/log/containers/fluent*
+          - name: FLUENT_CONTAINER_TAIL_PARSER_TYPE
+            value: /^(?<time>.+) (?<stream>stdout|stderr)( (?<logtag>.))? (?<log>.*)$/
+          - name: FLUENT_CONTAINER_TAIL_PARSER_TIME_FORMAT
+            value: "%Y-%m-%dT%H:%M:%S.%N%:z"
+-----------------------------------------
+diff -u fluentd-daemonset-elasticsearch-rbac.yaml_bk_raw fluentd-daemonset-elasticsearch-rbac.yaml
+
+kubectl apply -f fluentd-daemonset-elasticsearch-rbac.yaml
+kubectl delete -f fluentd-daemonset-elasticsearch-rbac.yaml
+
+kubectl create deployment busybox --image=busybox -- ping localhost
+kubectl delete deployment busybox

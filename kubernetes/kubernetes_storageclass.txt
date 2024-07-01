@@ -1,0 +1,38 @@
+KUBERNETES STORAGECLASS, 202405
+
+wget -c "https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner/archive/refs/tags/nfs-subdir-external-provisioner-4.0.18.zip" -O nfs-subdir-external-provisioner-4.0.18.zip
+wget -c "http://199.115.230.237:12345/kubernetes/nfs-subdir-external-provisioner-4.0.18.zip" -O nfs-subdir-external-provisioner-4.0.18.zip
+
+unzip -l nfs-subdir-external-provisioner-4.0.18.zip
+unzip nfs-subdir-external-provisioner-4.0.18.zip
+
+cd nfs-subdir-external-provisioner-nfs-subdir-external-provisioner-4.0.18
+cd deploy
+
+cp -a deployment.yaml deployment.yaml_bk_raw
+diff -u deployment.yaml_bk_raw deployment.yaml
+
+sed -i "s/value: 10.3.243.101/value: 172.22.23.73/g" deployment.yaml
+sed -i "s/server: 10.3.243.101/server: 172.22.23.73/g" deployment.yaml
+sed -i "s|value: /ifs/kubernetes|value: /data|g" deployment.yaml
+sed -i "s|path: /ifs/kubernetes|path: /data|g" deployment.yaml
+sed -i "s|image: registry.k8s.io|image: m.daocloud.io/registry.k8s.io|g" deployment.yaml
+diff -u deployment.yaml_bk_raw deployment.yaml
+
+kubectl apply -f class.yaml
+kubectl apply -f rbac.yaml
+kubectl apply -f deployment.yaml
+
+kubectl get pod
+kubectl get sc,pv,pvc
+
+kubectl patch storageclass nfs-client -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install my-mysql bitnami/mysql --version 10.1.1
+helm install my-mysql bitnami/mysql --version 10.1.1 --set global.storageClass="nfs-client"
+helm uninstall my-mysql
+
+MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default my-mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
+kubectl run my-mysql-client --rm --tty -i --restart='Never' --image  docker.io/bitnami/mysql:8.0.36-debian-12-r10 --namespace default --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD --command -- bash
+mysql -h my-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"

@@ -1,0 +1,13 @@
+KUBERNETES DOCKER REGISTRY, 202405
+
+docker pull registry:2
+
+docker run -d -p 5000:5000 --name registry registry:2
+
+docker pull nginx
+docker tag nginx localhost:5000/nginx
+docker push localhost:5000/nginx
+
+docker pull 172.22.23.74:5000/nginx
+
+kubectl create deployment nginx --image=172.22.23.74:5000/nginx

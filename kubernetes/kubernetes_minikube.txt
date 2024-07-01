@@ -1,0 +1,29 @@
+KUBERNETES MINIKUBE, 202405
+
+wget -c "https://github.com/kubernetes/minikube/releases/download/v1.33.1/minikube-linux-amd64" -O minikube-linux-amd64
+wget -c "http://199.115.230.237:12345/kubernetes/minikube_v1.33.1/minikube-linux-amd64" -O minikube-linux-amd64
+
+chown root:root minikube-linux-amd64
+
+chmod +x minikube-linux-amd64
+
+cp -a minikube-linux-amd64 /usr/local/bin/minikube
+
+minikube version
+
+minikube start
+minikube start --driver=docker --force --image-mirror-country="cn"
+
+minikube stop
+minikube delete
+rm -rf /root/.minikube
+rm -rf /root/.kube
+
+minikube status
+kubectl get pods -A
+
+minikube addons list
+minikube addons enable metrics-server
+minikube addons disable metrics-server
+
+minikube dashboard

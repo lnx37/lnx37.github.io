@@ -1,0 +1,16 @@
+KUBERNETES STORAGE NFS, 202405
+
+yum install nfs-utils -y
+
+systemctl enable nfs
+systemctl restart nfs
+mkdir -p /data
+echo "/data *(rw,sync,no_root_squash)" >/etc/exports
+systemctl restart nfs
+cat /etc/exports
+systemctl status nfs
+exportfs -av
+
+systemctl disable nfs
+systemctl stop nfs
+rm -f /etc/exports

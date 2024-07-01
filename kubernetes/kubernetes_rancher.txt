@@ -1,0 +1,32 @@
+KUBERNETES RANCHER, 202403, 202405
+
+
+
+-- requirement
+2c4g
+
+
+
+-- install
+docker pull rancher/rancher:latest
+crictl pull docker.io/rancher/fleet-agent:v0.9.0
+crictl pull docker.io/rancher/rancher-agent:v2.8.2
+crictl pull docker.io/rancher/rancher-webhook:v0.4.2
+crictl pull docker.io/rancher/shell:v0.1.22
+https://hub.docker.com/r/rancher/rancher
+https://hub.docker.com/r/rancher/rancher-agent
+
+docker run -d --restart=unless-stopped \
+  -p 80:80 -p 443:443 \
+  --privileged \
+  rancher/rancher:latest
+
+docker logs container-id  2>&1 | grep "Bootstrap Password:"
+
+curl --insecure -sfL https://120.79.232.213/v3/import/6lgnfpms2cwbfpfqtlsp2dkvtpp59q27khjzl87kc6c4ln8s5hdf4d_c-m-w6krjfkz.yaml | kubectl apply -f -
+
+
+
+-- refer
+https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/installation-requirements
+https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/other-installation-methods/rancher-on-a-single-node-with-docker

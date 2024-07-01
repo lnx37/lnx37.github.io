@@ -1,0 +1,37 @@
+KUBERNETES KUBESPHERE, 202405
+
+
+
+-- requirement
+master 2c4g
+worker 2c2g*3
+
+
+
+-- install
+wget "https://github.com/kubesphere/ks-installer/releases/download/v3.4.1/kubesphere-installer.yaml" -O kubesphere-installer.yaml
+wget "https://github.com/kubesphere/ks-installer/releases/download/v3.4.1/cluster-configuration.yaml" -O cluster-configuration.yaml
+
+cp -a kubesphere-installer.yaml kubesphere-installer.yaml_bk_raw
+cp -a cluster-configuration.yaml cluster-configuration.yaml_bk_raw
+
+kubectl apply -f kubesphere-installer.yaml
+kubectl apply -f cluster-configuration.yaml
+
+kubectl delete -f kubesphere-installer.yaml
+kubectl delete -f cluster-configuration.yaml
+kubectl delete namespace kubesphere-controls-system
+kubectl delete namespace kubesphere-monitoring-system
+
+kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l 'app in (ks-install, ks-installer)' -o jsonpath='{.items[0].metadata.name}') -f
+kubectl get svc/ks-console -n kubesphere-system
+
+
+http://172.22.23.74:30880
+admin
+P@88w0rd
+
+
+
+-- refer
+https://kubesphere.io/docs/v3.4/quick-start/minimal-kubesphere-on-k8s/

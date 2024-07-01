@@ -1,0 +1,30 @@
+KUBERNETES CRIO, 202405
+
+wget -c "https://storage.googleapis.com/cri-o/artifacts/cri-o.amd64.v1.30.1.tar.gz" -O cri-o.amd64.v1.30.1.tar.gz
+wget -c "http://199.115.230.237:12345/kubernetes/cri-o.amd64.v1.30.1.tar.gz" -O cri-o.amd64.v1.30.1.tar.gz
+
+tar tvf cri-o.amd64.v1.30.1.tar.gz
+tar xzvf cri-o.amd64.v1.30.1.tar.gz
+
+chown -R root:root cri-o
+
+mkdir -p /etc/crio
+mkdir -p /etc/crio/crio.conf.d
+mkdir -p /opt/cni/bin
+mkdir -p /usr/local/lib/systemd/system
+mkdir -p /usr/local/share/oci-umount/oci-umount.d
+
+cd cri-o
+
+./install
+
+systemctl daemon-reload
+systemctl enable --now crio
+
+systemctl status crio
+systemctl restart crio
+systemctl status crio
+
+crictl ps
+crictl image
+crictl pull nginx
